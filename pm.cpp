@@ -30,15 +30,13 @@ int main ()
         if (items[0].revents & ZMQ_POLLIN) {
             zmq::message_t message (5);
             receiver.recv(&message);
-            std::cout << "Received from rx " << std::endl;
+            std::cout << "Received request from rx " << std::endl;
 
             std::cout << "Send to tx" << std::endl;
             zmq::message_t request (12);
             memcpy (request.data (), "Pub-1 Data", 12);
             publisher.send (request);
         }
-        
-        
         
         sleep(1);
     }

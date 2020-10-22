@@ -21,7 +21,7 @@ int main ()
         static_cast<void*>(pull), 0, ZMQ_POLLIN, 0 
     }};
 
-    std::cout << "Send to pm"<< std::endl;
+    std::cout << "Sending request to pm"<< std::endl;
     zmq::message_t message;
     push.send(message);
 
@@ -32,12 +32,10 @@ int main ()
         if (items[0].revents & ZMQ_POLLIN) {
             zmq::message_t update;
             pull.recv (&update);
-            std::cout << "Received from tx"<< std::endl;
-            // std::cout << update << std::endl;
             std::string updateMsg = std::string(static_cast<char*>(update.data()), update.size());
-            std::cout << updateMsg << std::endl;
+            std::cout << updateMsg << " received from tx" << std::endl;
 
-            std::cout << "Send to pm"<< std::endl;
+            std::cout << "Sending request to pm"<< std::endl;
             zmq::message_t message;
             push.send(message);
         }

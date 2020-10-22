@@ -39,7 +39,7 @@ int main ()
             std::string data = "data" + std::to_string(rnd);
             zmq_send(push, data.c_str(), data.length(), 0);
 
-            std::cout << "Sent to rx"<< std::endl;
+            std::cout << "Sending data to rx for analysis"<< std::endl;
         }
 
     }
