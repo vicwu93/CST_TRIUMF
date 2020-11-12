@@ -5,6 +5,7 @@
 
 class RequestData {
   public:
+    // Contents of request data? Time duration?? Counter?ty
     int test;
     char port [BUFSIZE];
 

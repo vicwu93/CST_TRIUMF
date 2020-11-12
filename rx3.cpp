@@ -21,16 +21,16 @@ int main()
     // Multiple pushes to pull
 
     zmq::socket_t pull(context, ZMQ_PULL);
-    const char *port = "1237";
+    const char *port = "1238";
 
-    pull.bind("tcp://*:1237");
+    pull.bind("tcp://*:1238");
 
     zmq::pollitem_t items[] = {
         {static_cast<void *>(pull), 0, ZMQ_POLLIN, 0}};
 
     RequestData request;
     // request.test = 21;
-    strcpy(request.port, "1237");
+    strcpy(request.port, "1238");
     char requestbuffer[sizeof(request)];
     request.encode(requestbuffer);
 
@@ -70,7 +70,7 @@ int main()
             std::cout << "All received" << std::endl;
             txCount = 0;
             zmq_send(push, finishedbuff, sizeof(finishedbuff), 0);
-            sleep(2);
+            sleep(1);
             std::cout << "Send request to manager: " << request.port << std::endl;
             zmq_send(push, requestbuffer, sizeof(requestbuffer), 0);
         }

@@ -72,7 +72,7 @@ class DemoData {
 
       timestamp_secs = (double)(timestamp_word & 0xFFFFFFFFFFFF) / CLOCK_RATE_HZ;
       channel_id = (timestamp_word >> 56) & 0x3F;
-      is_end_of_slice = (timestamp_word & ((uint64_t)1 >> 48));
+      is_end_of_slice = (timestamp_word & ((uint64_t)1 << 48));
 
       uint16_t wf_words_size = (wf_size_word & 0x7F);
       wf_words.resize(wf_words_size);
