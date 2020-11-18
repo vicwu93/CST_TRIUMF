@@ -10,7 +10,7 @@
 int main()
 {
     int nTx = 2;
-    // bool rxFlags[nTx] = {false};
+    bool rxFlags[2] = {false};
     int txCount = 0;
 
     zmq::context_t context(1);
@@ -53,25 +53,37 @@ int main()
 
             data.decode(buffer);
             std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<< std::endl;
-            std::cout << "Received from tx: " << data.timestamp_secs << std::endl;
-            std::cout << "Is end of slice: " << data.is_end_of_slice << std::endl;
+            std::cout << "Received from tx: " << data.channel_id << std::endl;
+            // std::cout << "Is end of slice: " << data.is_end_of_slice << std::endl;
 
             if(data.is_end_of_slice){
-                std::cout << "Here " << std::endl;
+                std::cout << "Is end of slice: True" << std::endl;
+                rxFlags[txCount] = true;
                 txCount++;
+            } else {
+                std::cout << "Is end of slice: False" << std::endl;
             }
 
         }
 
 
 
-        if (txCount == nTx)
-        {
-            std::cout << "All received" << std::endl;
+        if (std::all_of(
+            std::begin(rxFlags), 
+            std::end(rxFlags), 
+            [](bool i)
+            { 
+              return i; // or return !i ;
+            }
+        )){
+            for(int i = 0; i < nTx; i++) {
+                rxFlags[i] = 0;
+            }
+            std::cout << "All tx data recevied" << std::endl;
             txCount = 0;
             zmq_send(push, finishedbuff, sizeof(finishedbuff), 0);
-            sleep(1);
-            std::cout << "Send request to manager: " << request.port << std::endl;
+            sleep(2);
+            std::cout << "Sending request to manager with port: " << request.port << std::endl;
             zmq_send(push, requestbuffer, sizeof(requestbuffer), 0);
         }
     }

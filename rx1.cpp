@@ -9,9 +9,10 @@
 
 int main()
 {
-    int nTx = 2;
-    // bool rxFlags[nTx] = {false};
     int txCount = 0;
+    int nTx = 2;
+    // 2 is number of tx running
+    bool rxFlags[2] = {0};
     int numAnalyzed = 0;
 
     zmq::context_t context(1);
@@ -57,17 +58,25 @@ int main()
 
             data.decode(buffer);
             std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<< std::endl;
-            std::cout << "Received from tx: " << data.timestamp_secs << std::endl;
-            std::cout << "Is end of slice: " << data.is_end_of_slice << std::endl;
+            std::cout << "Received from tx: " << data.channel_id << std::endl;
+            // std::cout << "Is end of slice: " << data.is_end_of_slice << std::endl;
 
+             
             if(data.is_end_of_slice){
-                std::cout << "End of slice recieved " << std::endl;
+                // std::cout << "End of slice received " << std::endl;
+                // txCount++;
+                std::cout << "Is end of slice: True" << std::endl;
+                rxFlags[txCount] = true;
                 txCount++;
             }else{
-                // Analyze data?
-                numAnalyzed = ++numAnalyzed;
-            }
+                std::cout << "Is end of slice: False" << std::endl;
 
+                // std::cout << "End of slice received " << std::endl;
+
+                // Analyze data?
+                // numAnalyzed = ++numAnalyzed;
+            }
+            
 
             // if(zmq_getsockopt(pull, ZMQ_RCVMORE, &rcvcheck, &rcvcheck_size) == 0){
             //      std::cout << "ZMQ_RCVMORE " << data.is_end_of_slice << std::endl;
@@ -79,10 +88,17 @@ int main()
             // }
         }
 
-
-
-        if (txCount == nTx)
-        {
+        if (std::all_of(
+            std::begin(rxFlags), 
+            std::end(rxFlags), 
+            [](bool i)
+            { 
+              return i; // or return !i ;
+            }
+        )){
+            for(int i = 0; i < nTx; i++) {
+                rxFlags[i] = 0;
+            }
             std::cout << "All tx data recevied" << std::endl;
             txCount = 0;
             zmq_send(push, finishedbuff, sizeof(finishedbuff), 0);

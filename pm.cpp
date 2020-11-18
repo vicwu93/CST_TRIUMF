@@ -72,8 +72,9 @@ int main ()
                 active.pop();
                 txReady = true;
                 std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "  << std::endl;
-                ts_printf("- Rx received all tx data, pop queue \n");
+                ts_printf("- SIZE OF WAITING QUEUE %d\n",  waiting.size());
                 ts_printf("- SIZE OF ACTIVE QUEUE %d\n",  active.size());
+                ts_printf("- Rx received all tx data, pop queue \n");
 
             }else{
                 request.decode(buf);
@@ -97,7 +98,7 @@ int main ()
             active.push(waiting.front());
             waiting.pop();
             std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ "<< std::endl;
-            ts_printf("- Rx received all tx data, pop queue \n");
+            // ts_printf("- Rx received all tx data, pop queue \n");
             ts_printf("- SIZE OF WAITING QUEUE %d\n",  waiting.size());
             ts_printf("- SIZE OF ACTIVE QUEUE %d\n",  active.size());
         }
