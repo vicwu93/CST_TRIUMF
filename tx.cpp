@@ -100,7 +100,7 @@ int main ()
                         zmq_send (push2, buffer, data[i].get_encoded_size_bytes(), 0);
                     }else{
                         std::cout << "Sending to rx for data: "<< data[i].channel_id <<std::endl;
-                        zmq_send (push2, buffer, data[i].get_encoded_size_bytes(), ZMQ_SNDMORE);
+                        zmq_send (push2, buffer, data[i].get_encoded_size_bytes(), 0);
                     }
                 }
 
@@ -115,7 +115,7 @@ int main ()
                         zmq_send (push3, buffer, data[i].get_encoded_size_bytes(), 0);
                     }else{
                         std::cout << "Sending to rx for data: "<< data[i].channel_id <<std::endl;
-                        zmq_send (push3, buffer, data[i].get_encoded_size_bytes(), ZMQ_SNDMORE);
+                        zmq_send (push3, buffer, data[i].get_encoded_size_bytes(), 0);
                     }
                 }
             }
